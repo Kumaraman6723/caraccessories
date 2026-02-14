@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { API_BASE } from "../utils/api.js";
 
 const AdminContext = createContext(null);
 
@@ -31,9 +32,7 @@ export function AdminProvider({ children }) {
     const idToken = credentialResponse?.credential;
     if (!idToken) return { ok: false };
 
-    const API_URL = import.meta.env.VITE_API_URL || "";
-    const base = API_URL || (window.location.port === "5173" ? "" : "");
-    const url = `${base}/api/auth/admin`;
+    const url = `${API_BASE}/api/auth/admin`;
 
     try {
       const res = await fetch(url, {

@@ -2,18 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useAdmin } from "../../contexts/AdminContext.jsx";
-
-const API_URL = import.meta.env.VITE_API_URL || "";
+import { API_BASE } from "../../utils/api.js";
 
 function AdminDashboardPage() {
   const [productsCount, setProductsCount] = useState(0);
   const { logout } = useAdmin();
 
-  const base = () => API_URL || (window.location.port === "5173" ? "" : "");
-
   useEffect(() => {
     axios
-      .get(`${base()}/api/products`)
+      .get(`${API_BASE}/api/products`)
       .then((res) => {
         if (res.data?.success && Array.isArray(res.data.products)) {
           setProductsCount(res.data.products.length);

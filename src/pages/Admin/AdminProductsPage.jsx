@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useAdmin } from "../../contexts/AdminContext.jsx";
-
-const API_URL = import.meta.env.VITE_API_URL || "";
+import { API_BASE } from "../../utils/api.js";
 
 function AdminProductsPage() {
   const [products, setProducts] = useState([]);
@@ -18,8 +17,6 @@ function AdminProductsPage() {
   const [editSubmitting, setEditSubmitting] = useState(false);
   const { getAdminToken } = useAdmin();
 
-  const base = () => API_URL || (window.location.port === "5173" ? "" : "");
-
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -27,7 +24,7 @@ function AdminProductsPage() {
   const fetchProducts = () => {
     setLoading(true);
     axios
-      .get(`${base()}/api/products`)
+      .get(`${API_BASE}/api/products`)
       .then((res) => {
         if (res.data?.success && Array.isArray(res.data.products)) {
           setProducts(res.data.products);
@@ -78,7 +75,7 @@ function AdminProductsPage() {
       fd.append("tagline", form.tagline.trim());
       images.forEach((file) => fd.append("images", file));
 
-      const res = await axios.post(`${base()}/api/products`, fd, {
+      const res = await axios.post(`${API_BASE}/api/products`, fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       if (res.data?.success) {
@@ -165,7 +162,7 @@ function AdminProductsPage() {
       fd.append("tagline", editForm.tagline.trim());
       fd.append("existingImages", JSON.stringify(editExistingImages));
       editNewImages.forEach((file) => fd.append("images", file));
-      const res = await axios.put(`${base()}/api/products/${editingProduct.id}`, fd, {
+      const res = await axios.put(`${API_BASE}/api/products/${editingProduct.id}`, fd, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       if (res.data?.success) {
@@ -190,7 +187,7 @@ function AdminProductsPage() {
       return;
     }
     try {
-      const res = await axios.delete(`${base()}/api/products/${id}`, {
+      const res = await axios.delete(`${API_BASE}/api/products/${id}`, {
         headers: { "X-Admin-Token": token },
       });
       if (res.data?.success) {

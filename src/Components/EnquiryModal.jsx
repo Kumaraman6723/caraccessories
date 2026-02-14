@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useAdmin } from "../contexts/AdminContext.jsx";
-
-const API_URL = import.meta.env.VITE_API_URL || "";
+import { API_BASE } from "../utils/api.js";
 
 function EnquiryModal({ isOpen, onClose, product }) {
   const [form, setForm] = useState({ name: "", email: "", address: "", phone: "" });
@@ -39,8 +38,7 @@ function EnquiryModal({ isOpen, onClose, product }) {
 
     setSubmitting(true);
     try {
-      const base = API_URL || (window.location.port === "5173" ? "" : "");
-      const res = await axios.post(`${base}/api/enquiry`, {
+      const res = await axios.post(`${API_BASE}/api/enquiry`, {
         name: form.name.trim(),
         email: form.email.trim(),
         address: form.address.trim(),

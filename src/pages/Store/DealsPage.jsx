@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
-const API_URL = import.meta.env.VITE_API_URL || "";
+import { API_BASE } from "../../utils/api.js";
 
 function DealsPage() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const base = API_URL || (window.location.port === "5173" ? "" : "");
-    axios.get(`${base}/api/products`).then((res) => {
+    axios.get(`${API_BASE}/api/products`).then((res) => {
       if (res.data?.success && Array.isArray(res.data.products)) {
         setProducts(res.data.products);
       }

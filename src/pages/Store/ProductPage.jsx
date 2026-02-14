@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import EnquiryModal from "../../Components/EnquiryModal.jsx";
-
-const API_URL = import.meta.env.VITE_API_URL || "";
+import { API_BASE } from "../../utils/api.js";
 
 function ProductPage() {
   const { id } = useParams();
@@ -14,8 +13,7 @@ function ProductPage() {
   const [enquiryOpen, setEnquiryOpen] = useState(false);
 
   useEffect(() => {
-    const base = API_URL || (window.location.port === "5173" ? "" : "");
-    axios.get(`${base}/api/products`)
+    axios.get(`${API_BASE}/api/products`)
       .then((res) => {
         if (res.data?.success && Array.isArray(res.data.products)) {
           const p = res.data.products.find((pr) => pr.id === id);
