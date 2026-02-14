@@ -1,6 +1,6 @@
 import React from "react";
 
-const ADMIN_GMAIL = import.meta.env.VITE_ADMIN_GMAIL || "kumarprasadaman1234@gmail.com";
+const ADMIN_GMAIL = import.meta.env.VITE_ADMIN_GMAIL || "";
 
 function AdminOrdersPage() {
 
