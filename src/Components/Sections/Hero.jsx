@@ -192,6 +192,38 @@ function Hero() {
           <p className="px-4 pt-3 text-xs font-semibold text-white">
             Visit Banty Car Accessories
           </p>
+          <div className="px-4 pb-3 text-xs text-white/80">
+            <p>
+              <span className="font-bold text-white">Mobile:&nbsp;</span>
+              <a
+                href="tel:+919717781953"
+                className="font-bold text-[#22d3ee] hover:text-[#f97316]"
+              >
+                9717781953
+              </a>
+              <span className="mx-1 font-bold text-white">/</span>
+              <a
+                href="tel:+918285310740"
+                className="font-bold text-[#22d3ee] hover:text-[#f97316]"
+              >
+                8285310740
+              </a>
+            </p>
+            <p className="mt-1">
+              Address:{" "}
+              <span className="text-white/90">
+                Shop no 3, Sheetla Mata Road, Rajiv Nagar, Sector 13
+              </span>
+            </p>
+            <a
+              href="https://www.google.com/maps?q=28.4797587,77.0398615"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-2 inline-flex text-[#22d3ee] hover:text-[#f97316]"
+            >
+              View on Google Maps
+            </a>
+          </div>
           <div className="mt-2 h-40 w-full sm:h-52">
             <iframe
               title="Banty Car Accessories location"

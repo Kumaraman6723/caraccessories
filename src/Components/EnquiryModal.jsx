@@ -1,65 +1,6 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { useAdmin } from "../contexts/AdminContext.jsx";
-import { API_BASE } from "../utils/api.js";
+import React from "react";
 
 function EnquiryModal({ isOpen, onClose, product }) {
-  const [form, setForm] = useState({ name: "", email: "", address: "", phone: "" });
-  const [submitting, setSubmitting] = useState(false);
-  const { user } = useAdmin();
-
-  useEffect(() => {
-    if (isOpen && user) {
-      setForm((prev) => ({
-        ...prev,
-        name: prev.name || user.name || "",
-        email: prev.email || user.email || "",
-      }));
-    }
-  }, [isOpen, user]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!form.name.trim() || !form.email.trim() || !form.phone.trim()) {
-      toast.error("Please fill in name, email and phone.");
-      return;
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(form.email)) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-
-    setSubmitting(true);
-    try {
-      const res = await axios.post(`${API_BASE}/api/enquiry`, {
-        name: form.name.trim(),
-        email: form.email.trim(),
-        address: form.address.trim(),
-        phone: form.phone.trim(),
-        productId: product?.id,
-        productName: product?.name,
-      });
-      if (res.data?.success) {
-        toast.success("Enquiry sent! We will contact you shortly.");
-        setForm({ name: "", email: "", address: "", phone: "" });
-        onClose();
-      } else {
-        toast.error(res.data?.message || "Failed to send enquiry.");
-      }
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to send enquiry. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   if (!isOpen) return null;
 
   return (
@@ -89,71 +30,57 @@ function EnquiryModal({ isOpen, onClose, product }) {
             Enquiry for: <span className="font-semibold text-white">{product.name}</span>
           </p>
         )}
-        <form onSubmit={handleSubmit} className="space-y-3 text-sm">
-          <div>
-            <label className="mb-1 block text-[11px] text-white/70">Name *</label>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              required
-              className="w-full rounded-md border border-white/15 bg-black/70 px-3 py-2 text-white outline-none focus:border-[#22d3ee]"
-              placeholder="Your name"
-            />
+
+        <div className="space-y-4">
+          <div className="rounded-lg border border-white/15 bg-black/70 p-3 text-xs text-white/80">
+            <p className="mb-2 text-[12px] font-bold text-white">Shop details</p>
+            <p className="mt-1">
+              <span className="font-bold text-white">Mobile:&nbsp;</span>
+              <a
+                href="tel:+919717781953"
+                className="font-bold text-[#22d3ee] hover:text-[#f97316]"
+              >
+                9717781953
+              </a>
+              <span className="mx-1 font-bold text-white">/</span>
+              <a
+                href="tel:+918285310740"
+                className="font-bold text-[#22d3ee] hover:text-[#f97316]"
+              >
+                8285310740
+              </a>
+            </p>
+            <p className="mt-2">
+              <span className="font-bold text-white">Address:&nbsp;</span>
+              <span className="font-bold text-white">
+                Shop no 3, Sheetla Mata Road, Rajiv Nagar, Sector 13
+              </span>
+            </p>
           </div>
-          <div>
-            <label className="mb-1 block text-[11px] text-white/70">Email *</label>
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-              className="w-full rounded-md border border-white/15 bg-black/70 px-3 py-2 text-white outline-none focus:border-[#22d3ee]"
-              placeholder="you@example.com"
-            />
+
+          <div className="rounded-lg border border-white/15 bg-black/70 p-3">
+            <p className="mb-2 text-[12px] font-bold text-white">
+              Google Map Location
+            </p>
+            <div className="h-48 w-full overflow-hidden rounded-md">
+              <iframe
+                title="Shop location"
+                src="https://www.google.com/maps?q=28.4797587,77.0398615&z=17&output=embed"
+                className="h-full w-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
           </div>
-          <div>
-            <label className="mb-1 block text-[11px] text-white/70">Phone *</label>
-            <input
-              type="tel"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              required
-              className="w-full rounded-md border border-white/15 bg-black/70 px-3 py-2 text-white outline-none focus:border-[#22d3ee]"
-              placeholder="10-digit mobile number"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-[11px] text-white/70">Address</label>
-            <textarea
-              name="address"
-              rows={2}
-              value={form.address}
-              onChange={handleChange}
-              className="w-full rounded-md border border-white/15 bg-black/70 px-3 py-2 text-white outline-none focus:border-[#22d3ee]"
-              placeholder="Your delivery address"
-            />
-          </div>
-          <div className="flex gap-2 pt-2">
-            <button
-              type="submit"
-              disabled={submitting}
-              className="flex-1 rounded-full bg-gradient-to-r from-[#f97316] via-[#ef4444] to-[#22d3ee] px-4 py-2.5 text-xs font-semibold text-black transition hover:brightness-110 disabled:opacity-60"
-            >
-              {submitting ? "Sending…" : "Send Enquiry"}
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-full border border-white/20 px-4 py-2.5 text-xs font-semibold text-white/80 hover:bg-white/5"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-full rounded-full border border-white/20 px-4 py-2.5 text-xs font-semibold text-white/90 hover:bg-white/5"
+          >
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );
